@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  minecraft_server:
+    build: .
+    container_name: minecraft_server
+    ports:
+      - "8443:8443"
+      - "25565:25565"
+      - "25575:25575"
+      - "19132:19132/udp"
+      - "19133:19133/udp"
+    volumes:
+      - ./maps:/var/games/minecraft/servers
+      - mineos-data:/var/games/minecraft
+      - bedrock-data:/bedrock_translator
+
+volumes:
+  mineos-data:
+  bedrock-data:
+  maps:

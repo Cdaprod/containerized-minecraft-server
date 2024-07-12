@@ -18,20 +18,16 @@ RUN apt-get update && apt-get install -y \
     g++ \
     make
 
-# Install Node.js 14
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
-    apt-get install -y nodejs
-
-# Clean npm cache
-RUN npm cache clean -f
+# Install Node.js using NVM
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash \
+    && . ~/.nvm/nvm.sh \
+    && nvm install 14 \
+    && nvm use 14 \
+    && nvm alias default 14
 
 # Install and update npm and node-gyp
 RUN npm install -g npm@latest && \
     npm install -g node-gyp
-
-# Set environment variables for node-gyp
-ENV PYTHON /usr/bin/python3
-ENV npm_config_python /usr/bin/python3
 
 # Install Java
 RUN wget https://github.com/AdoptOpenJDK/openjdk16-binaries/releases/download/jdk-16.0.1%2B9/OpenJDK16U-jre_x64_linux_hotspot_16.0.1_9.tar.gz -O openjdk-16-jre.tgz && \

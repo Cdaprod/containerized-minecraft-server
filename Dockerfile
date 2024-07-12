@@ -47,7 +47,7 @@ RUN mkdir -p /usr/games && \
     cd minecraft && \
     chmod +x generate-sslcert.sh mineos_console.js webui.js && \
     cp mineos.conf /etc/mineos.conf && \
-    npm install && \
+    npm install --legacy-peer-deps && \
     ./generate-sslcert.sh
 
 # Create necessary directories

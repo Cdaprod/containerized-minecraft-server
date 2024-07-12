@@ -12,7 +12,7 @@ map_urls = [
 ]
 
 # Directory to save maps
-map_dir = "/var/games/minecraft/servers"
+map_dir = "./maps"
 
 # Ensure the directory exists
 os.makedirs(map_dir, exist_ok=True)

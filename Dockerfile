@@ -21,7 +21,7 @@ RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
 RUN wget https://github.com/AdoptOpenJDK/openjdk16-binaries/releases/download/jdk-16.0.1%2B9/OpenJDK16U-jre_x64_linux_hotspot_16.0.1_9.tar.gz -O openjdk-16-jre.tgz && \
     tar xf openjdk-16-jre.tgz && \
     mv jdk-16.0.* /opt/openjdk-16.0-jre && \
-    ln -s /opt/openjdk-16.0-jre/bin/java /usr/bin/java && \
+    ln -sf /opt/openjdk-16.0-jre/bin/java /usr/bin/java && \
     rm openjdk-16-jre.tgz
 
 # Download and set up MineOS

@@ -4,7 +4,7 @@
 python /usr/local/bin/download_maps.py
 
 # Start MineOS
-cd /mineos/mineos-node
+cd /usr/games/minecraft
 npm start &
 
 # Start Bedrock server

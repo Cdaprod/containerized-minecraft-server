@@ -11,7 +11,12 @@ RUN apt-get update && apt-get install -y \
     screen \
     build-essential \
     openjdk-17-jre \
-    npm
+    npm \
+    python3 \
+    python3-pip \
+    python3-dev \
+    g++ \
+    make
 
 # Install Node.js
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
@@ -23,6 +28,10 @@ RUN wget https://github.com/AdoptOpenJDK/openjdk16-binaries/releases/download/jd
     mv jdk-16.0.* /opt/openjdk-16.0-jre && \
     ln -sf /opt/openjdk-16.0-jre/bin/java /usr/bin/java && \
     rm openjdk-16-jre.tgz
+
+# Update npm and node-gyp
+RUN npm install -g npm@latest && \
+    npm install -g node-gyp
 
 # Download and set up MineOS
 RUN mkdir -p /usr/games && \

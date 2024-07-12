@@ -19,15 +19,14 @@ RUN apt-get update && apt-get install -y \
     make
 
 # Install Node.js using NVM
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash \
-    && . ~/.nvm/nvm.sh \
-    && nvm install 14 \
-    && nvm use 14 \
-    && nvm alias default 14
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash && \
+    . ~/.nvm/nvm.sh && \
+    nvm install 14 && \
+    nvm use 14 && \
+    nvm alias default 14
 
 # Install and update npm and node-gyp
-RUN npm install -g npm@latest && \
-    npm install -g node-gyp
+RUN . ~/.nvm/nvm.sh && npm install -g npm@latest && npm install -g node-gyp
 
 # Install Java
 RUN wget https://github.com/AdoptOpenJDK/openjdk16-binaries/releases/download/jdk-16.0.1%2B9/OpenJDK16U-jre_x64_linux_hotspot_16.0.1_9.tar.gz -O openjdk-16-jre.tgz && \
@@ -43,8 +42,7 @@ RUN mkdir -p /usr/games && \
     cd minecraft && \
     chmod +x generate-sslcert.sh mineos_console.js webui.js && \
     cp mineos.conf /etc/mineos.conf && \
-    npm install --legacy-peer-deps && \
-    ./generate-sslcert.sh
+    . ~/.nvm/nvm.sh && npm install --legacy-peer-deps && ./generate-sslcert.sh
 
 # Create necessary directories
 RUN mkdir -p /var/games/minecraft/servers /mineos /bedrock_translator

@@ -33,7 +33,8 @@ FROM eclipse-temurin:17-jre AS java-base
 # Install npm and git in the java-base stage
 RUN apt-get update && apt-get install -y \
     npm \
-    git
+    git \
+    unzip
 
 # Download and set up MineOS
 RUN mkdir -p /usr/games && \

@@ -14,9 +14,10 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     python3-dev \
     g++ \
-    make
+    make \
+    libssl1.1
 
-# Install Node.js
+# Use Node.js
 FROM node:18 AS node-base
 
 # Install Node.js and npm in the node-base stage
@@ -30,12 +31,13 @@ RUN npm cache clean -f && \
 # Use Eclipse Temurin for Java
 FROM eclipse-temurin:17-jre AS java-base
 
-# Install npm, git, and python3-requests in the java-base stage
+# Install npm and git in the java-base stage
 RUN apt-get update && apt-get install -y \
     npm \
     git \
-    unzip \
-    python3-requests
+    python3-requests\
+    unzip\
+    libssl1.1
 
 # Download and set up MineOS
 RUN mkdir -p /usr/games && \
@@ -58,6 +60,9 @@ RUN wget -O /bedrock_translator/bedrock-server.zip https://minecraft.azureedge.n
 
 # Copy the Python script to the container
 COPY download_maps.py /usr/local/bin/download_maps.py
+
+# Install Python dependencies
+RUN pip3 install requests
 
 # Run the map download script
 RUN python3 /usr/local/bin/download_maps.py

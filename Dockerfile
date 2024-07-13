@@ -16,6 +16,9 @@ RUN apt-get update && apt-get install -y \
     g++ \
     make
 
+# Install Python dependencies
+RUN pip install requests
+
 # Use Node.js
 FROM node:18 AS node-base
 

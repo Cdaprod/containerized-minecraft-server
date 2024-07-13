@@ -33,6 +33,10 @@ RUN npm install -g npm@latest && \
 # Use Eclipse Temurin for Java
 FROM eclipse-temurin:17-jre AS java-base
 
+# Install necessary packages
+RUN apt-get update && apt-get install -y \
+    git
+
 # Download and set up MineOS
 RUN mkdir -p /usr/games && \
     cd /usr/games && \

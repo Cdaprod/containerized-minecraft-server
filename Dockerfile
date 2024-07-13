@@ -5,7 +5,7 @@ FROM python:3.9 as python-base
 FROM node:14 as node-base
 
 # Use an official OpenJDK runtime as a parent image
-FROM openjdk:17-jre as java-base
+FROM openjdk:17 as java-base
 
 # Base image setup
 FROM ubuntu:20.04

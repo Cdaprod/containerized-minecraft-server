@@ -16,23 +16,24 @@ RUN apt-get update && apt-get install -y \
     g++ \
     make
 
+# Use Node.js
+FROM node:18 AS node-base
+
+# Install Node.js and npm in the node-base stage
+RUN apt-get update && apt-get install -y nodejs
+
+# Clean npm cache and install node-gyp
+RUN npm cache clean -f && \
+    npm install -g npm@latest && \
+    npm install -g node-gyp
+
 # Use Eclipse Temurin for Java
 FROM eclipse-temurin:17-jre AS java-base
 
-# Install necessary packages
+# Install npm and git in the java-base stage
 RUN apt-get update && apt-get install -y \
-    curl \
-    wget \
-    unzip \
-    git \
-    npm
-
-# Clean npm cache
-RUN npm cache clean -f
-
-# Install and update npm and node-gyp
-RUN npm install -g npm@latest && \
-    npm install -g node-gyp
+    npm \
+    git
 
 # Download and set up MineOS
 RUN mkdir -p /usr/games && \
@@ -52,18 +53,6 @@ RUN wget -O /bedrock_translator/bedrock-server.zip https://minecraft.azureedge.n
     unzip /bedrock_translator/bedrock-server.zip -d /bedrock_translator && \
     chmod +x /bedrock_translator/bedrock_server && \
     rm /bedrock_translator/bedrock-server.zip
-
-# Use node-base to run the MineOS installation and setup
-FROM node:14 AS node-base
-
-# Copy the MineOS setup from java-base
-COPY --from=java-base /usr/games/minecraft /usr/games/minecraft
-
-# Copy the necessary directories
-COPY --from=java-base /var/games/minecraft/servers /var/games/minecraft/servers
-COPY --from=java-base /mineos /mineos
-COPY --from=java-base /bedrock_translator /bedrock_translator
-COPY --from=java-base /maps /maps
 
 # Copy the Python script to the container
 COPY download_maps.py /usr/local/bin/download_maps.py

@@ -7,7 +7,6 @@ RUN apt-get update && apt-get install -y \
     wget \
     unzip \
     git \
-    rdiff-backup \
     screen \
     build-essential \
     python3 \
@@ -15,8 +14,9 @@ RUN apt-get update && apt-get install -y \
     python3-dev \
     g++ \
     make \
+    libssl1.1 \
     rsync \
-    libssl1.1
+    rdiff-backup
 
 # Use Node.js 14
 FROM node:14 AS node-base
@@ -35,9 +35,10 @@ RUN apt-get update && apt-get install -y \
     git \
     python3-requests \
     unzip \
+    screen \
     rsync \
-    libssl-dev \
-    screen
+    rdiff-backup \
+    libssl-dev
 
 # Download and install libssl1.1 manually
 RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb && \

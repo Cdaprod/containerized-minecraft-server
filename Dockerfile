@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
     python3-dev \
     g++ \
     make \
-    libssl1.1
+    libssl3
 
 # Use Node.js
 FROM node:18 AS node-base

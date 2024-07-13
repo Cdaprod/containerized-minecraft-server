@@ -19,7 +19,10 @@ RUN apt-get update && apt-get install -y \
     npm \
     python3-requests
 
-# Install node-gyp and latest npm globally
+# Use Node.js 18
+FROM node:18 AS node-base
+
+# Clean npm cache and install node-gyp
 RUN npm cache clean -f && \
     npm install -g npm@latest && \
     npm install -g node-gyp

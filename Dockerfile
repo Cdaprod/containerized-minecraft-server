@@ -24,7 +24,7 @@ RUN npm install -g npm@latest \
     && npm install -g node-gyp
 
 # Stage 3: Java environment setup
-FROM openjdk:17-jre-slim AS java-base
+FROM openjdk:17-slim AS java-base
 
 # Final image setup
 FROM python-base

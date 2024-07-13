@@ -37,7 +37,7 @@ RUN apt-get update && apt-get install -y \
     git \
     python3-requests\
     unzip\
-    libssl1.1
+    libssl3
 
 # Download and set up MineOS
 RUN mkdir -p /usr/games && \

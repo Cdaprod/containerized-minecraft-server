@@ -33,10 +33,11 @@ FROM eclipse-temurin:17-jre AS java-base
 
 # Install npm and git in the java-base stage
 RUN apt-get update && apt-get install -y \
+    screen \
     npm \
     git \
-    python3-requests\
-    unzip\
+    python3-requests \
+    unzip \
     libssl3
 
 # Download and set up MineOS
@@ -60,7 +61,6 @@ RUN wget -O /bedrock_translator/bedrock-server.zip https://minecraft.azureedge.n
 
 # Copy the Python script to the container
 COPY download_maps.py /usr/local/bin/download_maps.py
-
 
 # Run the map download script
 RUN python3 /usr/local/bin/download_maps.py

@@ -1,16 +1,17 @@
-version: '3.8'  # Update to a supported version
+version: '3.8'
 
 services:
   minecraft_server:
-    build:
-      context: .
+    build: .
     ports:
+      - "8443:8443"
       - "25565:25565"
       - "25575:25575"
       - "19132:19132/udp"
       - "19133:19133/udp"
     volumes:
       - ./data:/data
+      - ./logs:/logs
+      - ./maps:/maps
     environment:
       - EULA=TRUE
-      - ONLINE_MODE=FALSE

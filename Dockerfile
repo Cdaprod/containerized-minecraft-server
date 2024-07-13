@@ -1,20 +1,7 @@
-# Base image for Python
+# Use an official Python runtime as a parent image
 FROM python:3.9 AS python-base
-RUN mkdir -p /usr/local/bin
 
-# Base image for Node.js
-FROM node:14 AS node-base
-RUN mkdir -p /usr/local/bin
-
-# Base image for Java
-FROM openjdk:17-jre-slim AS java-base
-RUN mkdir -p /opt/openjdk-17
-RUN echo "Contents of /opt/openjdk-17:" && ls -la /opt/openjdk-17
-
-# Main build stage
-FROM ubuntu:20.04
-
-# Install necessary packages
+# Install necessary packages for Python
 RUN apt-get update && apt-get install -y \
     curl \
     wget \
@@ -23,22 +10,28 @@ RUN apt-get update && apt-get install -y \
     rdiff-backup \
     screen \
     build-essential \
+    npm \
     python3 \
     python3-pip \
     python3-dev \
     g++ \
     make
 
-# Copy from base images
-COPY --from=python-base /usr/local/bin /usr/local/bin
-COPY --from=node-base /usr/local/bin /usr/local/bin
-COPY --from=java-base /opt/openjdk-17 /opt/openjdk-17
+# Install Node.js
+FROM node:14 AS node-base
 
-# Install npm and node-gyp
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
-    apt-get install -y nodejs && \
-    npm install -g npm@latest && \
+    apt-get install -y nodejs
+
+# Clean npm cache
+RUN npm cache clean -f
+
+# Install and update npm and node-gyp
+RUN npm install -g npm@latest && \
     npm install -g node-gyp
+
+# Use Eclipse Temurin for Java
+FROM eclipse-temurin:17-jre AS java-base
 
 # Download and set up MineOS
 RUN mkdir -p /usr/games && \
@@ -47,11 +40,11 @@ RUN mkdir -p /usr/games && \
     cd minecraft && \
     chmod +x generate-sslcert.sh mineos_console.js webui.js && \
     cp mineos.conf /etc/mineos.conf && \
-    npm install --legacy-peer-deps --unsafe-perm && \
+    npm install --legacy-peer-deps && \
     ./generate-sslcert.sh
 
 # Create necessary directories
-RUN mkdir -p /var/games/minecraft/servers /mineos /bedrock_translator
+RUN mkdir -p /var/games/minecraft/servers /mineos /bedrock_translator /maps
 
 # Download Bedrock server wrapper
 RUN wget -O /bedrock_translator/bedrock-server.zip https://minecraft.azureedge.net/bin-linux/bedrock-server-1.18.11.01.zip && \
@@ -61,6 +54,9 @@ RUN wget -O /bedrock_translator/bedrock-server.zip https://minecraft.azureedge.n
 
 # Copy the Python script to the container
 COPY download_maps.py /usr/local/bin/download_maps.py
+
+# Run the map download script
+RUN python3 /usr/local/bin/download_maps.py
 
 # Expose necessary ports
 EXPOSE 8443 25565 25575 19132/udp 19133/udp

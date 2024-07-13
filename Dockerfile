@@ -34,7 +34,8 @@ RUN apt-get update && apt-get install -y \
     git \
     python3-requests \
     unzip \
-    libssl-dev
+    libssl-dev \
+    screen
 
 # Download and install libssl1.1 manually
 RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb && \

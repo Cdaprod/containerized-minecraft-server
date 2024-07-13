@@ -16,10 +16,7 @@ RUN apt-get update && apt-get install -y \
     g++ \
     make
 
-# Install Python dependencies
-RUN pip install requests
-
-# Use Node.js
+# Install Node.js
 FROM node:18 AS node-base
 
 # Install Node.js and npm in the node-base stage
@@ -33,11 +30,12 @@ RUN npm cache clean -f && \
 # Use Eclipse Temurin for Java
 FROM eclipse-temurin:17-jre AS java-base
 
-# Install npm and git in the java-base stage
+# Install npm, git, and python3-requests in the java-base stage
 RUN apt-get update && apt-get install -y \
     npm \
     git \
-    unzip
+    unzip \
+    python3-requests
 
 # Download and set up MineOS
 RUN mkdir -p /usr/games && \

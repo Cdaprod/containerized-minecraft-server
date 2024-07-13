@@ -61,8 +61,6 @@ RUN wget -O /bedrock_translator/bedrock-server.zip https://minecraft.azureedge.n
 # Copy the Python script to the container
 COPY download_maps.py /usr/local/bin/download_maps.py
 
-# Install Python dependencies
-RUN pip3 install requests
 
 # Run the map download script
 RUN python3 /usr/local/bin/download_maps.py

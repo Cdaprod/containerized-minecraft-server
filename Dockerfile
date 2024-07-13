@@ -1,7 +1,7 @@
-# Use an official Python runtime as a parent image
-FROM python:3.9 AS python-base
+# Stage 1: Python environment setup
+FROM python:3.9-slim AS python-base
 
-# Install necessary packages for Python
+# Install necessary packages for Python and other dependencies
 RUN apt-get update && apt-get install -y \
     curl \
     wget \
@@ -16,23 +16,20 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Use an official Node.js runtime as a parent image
+# Stage 2: Node.js environment setup
 FROM node:14 AS node-base
 
-# Install necessary global packages for Node.js
+# Install global Node.js packages
 RUN npm install -g npm@latest \
     && npm install -g node-gyp
 
-# Use an official OpenJDK runtime as a parent image
+# Stage 3: Java environment setup
 FROM openjdk:17-jre AS java-base
 
-# Copy the installed JDK to the final image
-COPY --from=java-base /opt/openjdk-17 /opt/openjdk-17
-
-# Final image for Minecraft server
+# Final image setup
 FROM python-base
 
-# Install Node.js
+# Copy Node.js from node-base
 COPY --from=node-base /usr/local/bin/node /usr/local/bin/
 COPY --from=node-base /usr/local/lib/node_modules /usr/local/lib/node_modules
 
@@ -43,6 +40,9 @@ ENV NODE_VERSION 14
 # Install NVM and Node.js
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash \
     && . "$NVM_DIR/nvm.sh" && nvm install $NODE_VERSION
+
+# Copy Java from java-base
+COPY --from=java-base /opt/openjdk-17 /opt/openjdk-17
 
 # Install MineOS
 RUN mkdir -p /usr/games \

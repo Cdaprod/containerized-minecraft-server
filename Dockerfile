@@ -16,7 +16,8 @@ RUN apt-get update && apt-get install -y \
     make \
     libssl1.1 \
     rsync \
-    rdiff-backup
+    rdiff-backup \
+    passwd
 
 # Use Node.js 14
 FROM node:14 AS node-base
@@ -45,8 +46,9 @@ RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1
     dpkg -i libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb && \
     rm libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb
 
-# Create a user for MineOS with a password
-RUN useradd -m -s /bin/bash mc && echo "mc:root" | chpasswd
+# Create users and set passwords
+RUN useradd -m -s /bin/bash mc && echo 'mc:root' | chpasswd
+RUN useradd -m -s /bin/bash root && echo 'root:root' | chpasswd
 
 # Download and set up MineOS
 RUN mkdir -p /usr/games && \
@@ -59,7 +61,8 @@ RUN mkdir -p /usr/games && \
     ./generate-sslcert.sh
 
 # Create necessary directories
-RUN mkdir -p /var/games/minecraft/servers /mineos /bedrock_translator /maps
+RUN mkdir -p /var/games/minecraft/servers /mineos /bedrock_translator /maps /var/games/minecraft/logs && \
+    chmod -R 777 /var/games/minecraft/logs
 
 # Download Bedrock server wrapper
 RUN wget -O /bedrock_translator/bedrock-server.zip https://minecraft.azureedge.net/bin-linux/bedrock-server-1.18.11.01.zip && \

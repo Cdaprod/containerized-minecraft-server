@@ -1,7 +1,7 @@
-# Use Eclipse Temurin for Java as the base image
-FROM eclipse-temurin:17-jre AS base
+# Use an official Python runtime as a parent image
+FROM python:3.9 AS python-base
 
-# Install all necessary packages
+# Install necessary packages for Python
 RUN apt-get update && apt-get install -y \
     curl \
     wget \
@@ -15,17 +15,26 @@ RUN apt-get update && apt-get install -y \
     python3-dev \
     g++ \
     make \
-    libssl1.1 || apt-get install -y libssl3 \
-    npm \
-    python3-requests
+    libssl1.1
 
-# Use Node.js 18
-FROM node:18 AS node-base
+# Use Node.js 14
+FROM node:14 AS node-base
 
 # Clean npm cache and install node-gyp
 RUN npm cache clean -f && \
     npm install -g npm@latest && \
     npm install -g node-gyp
+
+# Use Eclipse Temurin for Java
+FROM eclipse-temurin:17-jre AS java-base
+
+# Install necessary dependencies in the java-base stage
+RUN apt-get update && apt-get install -y \
+    npm \
+    git \
+    python3-requests \
+    unzip \
+    libssl1.1
 
 # Download and set up MineOS
 RUN mkdir -p /usr/games && \

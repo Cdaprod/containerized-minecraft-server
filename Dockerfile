@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
     python3-dev \
     g++ \
     make \
+    rsync \
     libssl1.1
 
 # Use Node.js 14
@@ -34,6 +35,7 @@ RUN apt-get update && apt-get install -y \
     git \
     python3-requests \
     unzip \
+    rsync \
     libssl-dev \
     screen
 

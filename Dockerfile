@@ -45,6 +45,9 @@ RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1
     dpkg -i libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb && \
     rm libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb
 
+# Create a user for MineOS with a password
+RUN useradd -m -s /bin/bash mc && echo "mc:root" | chpasswd
+
 # Download and set up MineOS
 RUN mkdir -p /usr/games && \
     cd /usr/games && \

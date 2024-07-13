@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
     python3-dev \
     g++ \
     make \
-    libssl-dev
+    libssl1.1
 
 # Use Node.js 14
 FROM node:14 AS node-base
@@ -35,6 +35,11 @@ RUN apt-get update && apt-get install -y \
     python3-requests \
     unzip \
     libssl-dev
+
+# Download and install libssl1.1 manually
+RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb && \
+    dpkg -i libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb && \
+    rm libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb
 
 # Download and set up MineOS
 RUN mkdir -p /usr/games && \

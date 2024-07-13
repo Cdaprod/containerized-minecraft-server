@@ -1,7 +1,7 @@
-# Use Eclipse Temurin for Java
-FROM eclipse-temurin:17-jre AS java-base
+# Use Eclipse Temurin for Java as the base image
+FROM eclipse-temurin:17-jre AS base
 
-# Install necessary packages
+# Install all necessary packages
 RUN apt-get update && apt-get install -y \
     curl \
     wget \
@@ -18,6 +18,11 @@ RUN apt-get update && apt-get install -y \
     libssl1.1 || apt-get install -y libssl3 \
     npm \
     python3-requests
+
+# Install node-gyp and latest npm globally
+RUN npm cache clean -f && \
+    npm install -g npm@latest && \
+    npm install -g node-gyp
 
 # Download and set up MineOS
 RUN mkdir -p /usr/games && \

@@ -13,31 +13,31 @@ map_urls = [
 ]
 
 # Directory to save maps
-map_dir = "./maps"
+map_dir = "/maps"
 
 # Ensure the directory exists
 os.makedirs(map_dir, exist_ok=True)
 
 # Download and extract maps
 for url in map_urls:
-    response = requests.get(url)
-    if response.headers['Content-Type'] != 'application/zip':
-        print(f"Skipping {url} as it is not a zip file.")
-        continue
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Check for HTTP request errors
 
-    zip_path = os.path.join(map_dir, os.path.basename(url) + ".zip")
-    
-    # Save the zip file
-    with open(zip_path, "wb") as f:
-        f.write(response.content)
-    
-    # Extract the zip file
-    with ZipFile(BytesIO(response.content)) as zip_ref:
-        map_name = os.path.splitext(os.path.basename(zip_path))[0]
+        if 'Content-Type' not in response.headers or response.headers['Content-Type'] != 'application/zip':
+            print(f"Skipping {url} as it is not a zip file.")
+            continue
+
+        map_name = os.path.splitext(os.path.basename(url))[0]
         map_extract_path = os.path.join(map_dir, map_name)
-        zip_ref.extractall(map_extract_path)
-    
-    # Remove the zip file
-    os.remove(zip_path)
-    
+
+        # Save and extract the zip file
+        with ZipFile(BytesIO(response.content)) as zip_ref:
+            zip_ref.extractall(map_extract_path)
+
+        print(f"Downloaded and extracted {map_name} successfully.")
+        
+    except requests.RequestException as e:
+        print(f"Failed to download {url}: {e}")
+
 print("Maps downloaded and extracted successfully.")

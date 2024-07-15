@@ -68,15 +68,19 @@ RUN mkdir -p /var/games/minecraft/servers /mineos /bedrock_translator /maps /var
 RUN wget -O /var/games/minecraft/server.jar https://piston-data.mojang.com/v1/objects/450698d1863ab5180c25d7c804ef0fe6369dd1ba/server.jar
 
 # Copy the Bedrock server ZIP file from the repository
-COPY maps/bedrock-server-1.21.2.01.zip /bedrock_translator/bedrock-server.zip
+COPY maps/bedrock-server-1.21.3.01.zip /bedrock_translator/bedrock-server.zip
 
 # Unzip the Bedrock server
 RUN unzip /bedrock_translator/bedrock-server.zip -d /bedrock_translator && \
     chmod +x /bedrock_translator/bedrock_server && \
     rm /bedrock_translator/bedrock-server.zip
 
-# Copy server.properties to the correct location
-COPY config/server.properties /bedrock_translator/server.properties
+# Clone BedrockConnect repository
+# RUN git clone https://github.com/Cdaprod/BedrockConnect.git /bedrock_connect
+
+# Set up BedrockConnect (adjust these steps based on your BedrockConnect setup)
+# WORKDIR /bedrock_connect
+# RUN ./setup.sh
 
 # Copy the Python script to the container
 COPY download_maps.py /usr/local/bin/download_maps.py

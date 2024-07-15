@@ -1,5 +1,7 @@
 # Unified Minecraft Server Setup
 
+[Link to bedrock server](https://www.minecraft.net/en-us/download/server/bedrock)
+
 This project sets up a unified Docker container that runs MineOS for managing Minecraft servers, a Bedrock translator for cross-platform play, and a Python script for downloading awesome maps. The services are exposed on different ports and share the same IP address.
 
 ## Features

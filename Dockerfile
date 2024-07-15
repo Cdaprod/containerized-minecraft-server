@@ -47,7 +47,8 @@ RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1
     rm libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb
 
 # Create users and set passwords
-RUN useradd -m -s /bin/bash mc && echo 'mc:root' | chpasswd
+RUN useradd -m -s /bin/bash mc && echo 'mc:root' | chpasswd || true
+RUN useradd -m -s /bin/bash root && echo 'root:root' | chpasswd || true
 
 # Download and set up MineOS
 RUN mkdir -p /usr/games && \
@@ -66,11 +67,20 @@ RUN mkdir -p /var/games/minecraft/servers /mineos /bedrock_translator /maps /var
 # Download the Minecraft server JAR
 RUN wget -O /var/games/minecraft/server.jar https://piston-data.mojang.com/v1/objects/450698d1863ab5180c25d7c804ef0fe6369dd1ba/server.jar
 
-# Download the latest Bedrock server version 1.21.2
-RUN wget -O /bedrock_translator/bedrock-server.zip https://minecraft.azureedge.net/bin-linux/bedrock-server-1.21.2.01.zip && \
-    unzip /bedrock_translator/bedrock-server.zip -d /bedrock_translator && \
+# Copy the Bedrock server ZIP file from the repository
+COPY maps/bedrock-server-1.21.2.01.zip /bedrock_translator/bedrock-server.zip
+
+# Unzip the Bedrock server
+RUN unzip /bedrock_translator/bedrock-server.zip -d /bedrock_translator && \
     chmod +x /bedrock_translator/bedrock_server && \
     rm /bedrock_translator/bedrock-server.zip
+
+# Clone BedrockConnect repository
+RUN git clone https://github.com/Cdaprod/BedrockConnect.git /bedrock_connect
+
+# Set up BedrockConnect (adjust these steps based on your BedrockConnect setup)
+WORKDIR /bedrock_connect
+RUN ./setup.sh
 
 # Copy the Python script to the container
 COPY download_maps.py /usr/local/bin/download_maps.py

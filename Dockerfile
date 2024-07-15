@@ -48,6 +48,7 @@ RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1
 
 # Create users and set passwords
 RUN useradd -m -s /bin/bash mc && echo 'mc:root' | chpasswd
+RUN useradd -m -s /bin/bash root && echo 'root:root' | chpasswd
 
 # Download and set up MineOS
 RUN mkdir -p /usr/games && \
@@ -63,8 +64,8 @@ RUN mkdir -p /usr/games && \
 RUN mkdir -p /var/games/minecraft/servers /mineos /bedrock_translator /maps /var/games/minecraft/logs && \
     chmod -R 777 /var/games/minecraft/logs
 
-# Download the latest Minecraft server JAR
-RUN wget -O /var/games/minecraft/server.jar https://launcher.mojang.com/v1/objects/latest_minecraft_server.jar
+# Download the Minecraft server JAR
+RUN wget -O /var/games/minecraft/server.jar https://piston-data.mojang.com/v1/objects/450698d1863ab5180c25d7c804ef0fe6369dd1ba/server.jar
 
 # Download the latest Bedrock server version 1.21.2
 RUN wget -O /bedrock_translator/bedrock-server.zip https://minecraft.azureedge.net/bin-linux/bedrock-server-1.21.2.01.zip && \
@@ -86,4 +87,4 @@ COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Run the entrypoint script
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]f
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

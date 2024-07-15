@@ -1,10 +1,10 @@
 version: '3.8'
 
 services:
-  minecraft_server_world1:
+  saturns_orbit:
     build: .
-    image: cdaprod/minecraft_world2:latest
-    container_name: minecraft_dedicated_server_world1
+    image: cdaprod/saturns_orbit:latest
+    container_name: saturns_orbit
     ports:
       - "8443:8443"
       - "25565:25565"
@@ -12,31 +12,45 @@ services:
       - "19132:19132/udp"
       - "19133:19133/udp"
     volumes:
-      - ./data/world1:/data
-      - ./logs/world1:/logs
-      - ./maps/world1:/maps
+      - ./data:/data
+      - ./logs:/logs
+      - ./maps:/maps
     environment:
       - EULA=TRUE
-      - SERVER_NAME=World1
-      - SERVER_PORT=19132
-      - SERVER_PORT_V6=19133
+      - WORLD_NAME=saturns_orbit
 
-  minecraft_server_world2:
+  bessemer_city:
     build: .
-    image: cdaprod/minecraft_world2:latest
-    container_name: minecraft_dedicated_server_world2
+    image: cdaprod/bessemer_city:latest
+    container_name: bessemer_city
     ports:
-      - "8444:8443"
-      - "25566:25565"
-      - "25576:25575"
+      - "8444:8444"
+      - "25566:25566"
+      - "25576:25576"
       - "19134:19134/udp"
       - "19135:19135/udp"
     volumes:
-      - ./data/world2:/data
-      - ./logs/world2:/logs
-      - ./maps/world2:/maps
+      - ./data:/data
+      - ./logs:/logs
+      - ./maps:/maps
     environment:
       - EULA=TRUE
-      - SERVER_NAME=World2
-      - SERVER_PORT=19134
-      - SERVER_PORT_V6=19135
+      - WORLD_NAME=bessemer_city
+
+  blue_tide:
+    build: .
+    image: cdaprod/blue_tide:latest
+    container_name: blue_tide
+    ports:
+      - "8445:8445"
+      - "25567:25567"
+      - "25577:25577"
+      - "19136:19136/udp"
+      - "19137:19137/udp"
+    volumes:
+      - ./data:/data
+      - ./logs:/logs
+      - ./maps:/maps
+    environment:
+      - EULA=TRUE
+      - WORLD_NAME=blue_tide

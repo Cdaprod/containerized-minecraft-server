@@ -3,7 +3,7 @@ version: '3.8'
 services:
   minecraft_server_world1:
     build: .
-    container_name: minecraft_server_world1
+    container_name: minecraft_dedicated_server_world1
     ports:
       - "8443:8443"
       - "25565:25565"
@@ -22,7 +22,7 @@ services:
 
   minecraft_server_world2:
     build: .
-    container_name: minecraft_server_world2
+    container_name: minecraft_dedicated_server_world2
     ports:
       - "8444:8443"
       - "25566:25565"

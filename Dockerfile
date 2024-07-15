@@ -68,7 +68,7 @@ RUN mkdir -p /var/games/minecraft/servers /mineos /bedrock_translator /maps /var
 RUN wget -O /var/games/minecraft/server.jar https://piston-data.mojang.com/v1/objects/450698d1863ab5180c25d7c804ef0fe6369dd1ba/server.jar
 
 # Copy the Bedrock server ZIP file from the repository
-COPY maps/bedrock-server-1.21.2.01.zip /bedrock_translator/bedrock-server.zip
+COPY maps/bedrock-server-1.21.3.01.zip /bedrock_translator/bedrock-server.zip
 
 # Unzip the Bedrock server
 RUN unzip /bedrock_translator/bedrock-server.zip -d /bedrock_translator && \

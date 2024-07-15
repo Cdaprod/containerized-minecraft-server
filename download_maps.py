@@ -15,8 +15,9 @@ map_urls = [
 # Directory to save maps
 map_dir = "/maps"
 
-# Ensure the directory exists
+# Ensure the directory exists and has correct permissions
 os.makedirs(map_dir, exist_ok=True)
+os.chmod(map_dir, 0o777)
 
 # Download and extract maps
 for url in map_urls:
@@ -24,7 +25,7 @@ for url in map_urls:
         response = requests.get(url)
         response.raise_for_status()  # Check for HTTP request errors
 
-        if 'Content-Type' not in response.headers or response.headers['Content-Type'] != 'application/zip':
+        if 'Content-Type' not in response.headers or 'application/zip' not in response.headers['Content-Type']:
             print(f"Skipping {url} as it is not a zip file.")
             continue
 

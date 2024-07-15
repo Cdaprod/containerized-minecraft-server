@@ -17,7 +17,8 @@ RUN apt-get update && apt-get install -y \
     libssl1.1 \
     rsync \
     rdiff-backup \
-    passwd
+    passwd \
+    tar
 
 # Use Node.js 14
 FROM node:14 AS node-base
@@ -48,7 +49,6 @@ RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1
 
 # Create users and set passwords
 RUN useradd -m -s /bin/bash mc && echo 'mc:root' | chpasswd || true
-RUN useradd -m -s /bin/bash root && echo 'root:root' | chpasswd || true
 
 # Download and set up MineOS
 RUN mkdir -p /usr/games && \
@@ -60,9 +60,9 @@ RUN mkdir -p /usr/games && \
     npm install --legacy-peer-deps && \
     ./generate-sslcert.sh
 
-# Create necessary directories
+# Create necessary directories with proper permissions
 RUN mkdir -p /var/games/minecraft/servers /mineos /bedrock_translator /maps /var/games/minecraft/logs && \
-    chmod -R 777 /var/games/minecraft/logs
+    chmod -R 777 /var/games/minecraft/logs /maps
 
 # Download the Minecraft server JAR
 RUN wget -O /var/games/minecraft/server.jar https://piston-data.mojang.com/v1/objects/450698d1863ab5180c25d7c804ef0fe6369dd1ba/server.jar
@@ -81,9 +81,12 @@ COPY config/server.properties /bedrock_translator/server.properties
 # Copy the Python script to the container
 COPY download_maps.py /usr/local/bin/download_maps.py
 
-# Run the map download script and move maps to Bedrock server's worlds directory
-RUN python3 /usr/local/bin/download_maps.py && \
-    cp -r ./maps/* /bedrock_translator/worlds/
+# Run the map download script
+RUN python3 /usr/local/bin/download_maps.py
+
+# Copy switch world script to container
+COPY switch_world.sh /usr/local/bin/switch_world.sh
+RUN chmod +x /usr/local/bin/switch_world.sh
 
 # Copy and set the entrypoint script
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh

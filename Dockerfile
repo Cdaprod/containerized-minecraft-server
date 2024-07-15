@@ -76,11 +76,11 @@ RUN unzip /bedrock_translator/bedrock-server.zip -d /bedrock_translator && \
     rm /bedrock_translator/bedrock-server.zip
 
 # Clone BedrockConnect repository
-RUN git clone https://github.com/Cdaprod/BedrockConnect.git /bedrock_connect
+# RUN git clone https://github.com/Cdaprod/BedrockConnect.git /bedrock_connect
 
 # Set up BedrockConnect (adjust these steps based on your BedrockConnect setup)
-WORKDIR /bedrock_connect
-RUN ./setup.sh
+# WORKDIR /bedrock_connect
+# RUN ./setup.sh
 
 # Copy the Python script to the container
 COPY download_maps.py /usr/local/bin/download_maps.py

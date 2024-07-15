@@ -1,8 +1,9 @@
 version: '3.8'
 
 services:
-  minecraft_server:
+  minecraft_server_world1:
     build: .
+    container_name: minecraft_server_world1
     ports:
       - "8443:8443"
       - "25565:25565"
@@ -10,8 +11,30 @@ services:
       - "19132:19132/udp"
       - "19133:19133/udp"
     volumes:
-      - ./data:/data
-      - ./logs:/logs
-      - ./maps:/maps
+      - ./data/world1:/data
+      - ./logs/world1:/logs
+      - ./maps/world1:/maps
     environment:
       - EULA=TRUE
+      - SERVER_NAME=World1
+      - SERVER_PORT=19132
+      - SERVER_PORT_V6=19133
+
+  minecraft_server_world2:
+    build: .
+    container_name: minecraft_server_world2
+    ports:
+      - "8444:8443"
+      - "25566:25565"
+      - "25576:25575"
+      - "19134:19134/udp"
+      - "19135:19135/udp"
+    volumes:
+      - ./data/world2:/data
+      - ./logs/world2:/logs
+      - ./maps/world2:/maps
+    environment:
+      - EULA=TRUE
+      - SERVER_NAME=World2
+      - SERVER_PORT=19134
+      - SERVER_PORT_V6=19135

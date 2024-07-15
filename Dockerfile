@@ -48,6 +48,7 @@ RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1
 
 # Create users and set passwords
 RUN useradd -m -s /bin/bash mc && echo 'mc:root' | chpasswd || true
+RUN useradd -m -s /bin/bash root && echo 'root:root' | chpasswd || true
 
 # Download and set up MineOS
 RUN mkdir -p /usr/games && \
@@ -80,15 +81,16 @@ COPY config/server.properties /bedrock_translator/server.properties
 # Copy the Python script to the container
 COPY download_maps.py /usr/local/bin/download_maps.py
 
-# Run the map download script
-RUN python3 /usr/local/bin/download_maps.py
-
-# Expose necessary ports
-EXPOSE 8443 25565 25575 19132/udp 19133/udp
+# Run the map download script and move maps to Bedrock server's worlds directory
+RUN python3 /usr/local/bin/download_maps.py && \
+    cp -r ./maps/* /bedrock_translator/worlds/
 
 # Copy and set the entrypoint script
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Expose necessary ports
+EXPOSE 8443 25565 25575 19132/udp 19133/udp
 
 # Run the entrypoint script
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

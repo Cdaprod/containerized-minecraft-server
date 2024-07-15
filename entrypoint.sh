@@ -5,7 +5,7 @@ npm start &
 
 # Start the Bedrock server
 cd /bedrock_translator
-./bedrock_server &
+LD_LIBRARY_PATH=. ./bedrock_server &
 
 # Wait for any process to exit
 while :; do

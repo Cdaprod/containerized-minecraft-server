@@ -3,7 +3,7 @@ import requests
 from zipfile import ZipFile
 from io import BytesIO
 
-# List of map URLs
+# List of map URLs from web
 map_urls = [
     "https://www.minecraftmaps.com/49730-be-boxed/download",
     "https://www.minecraftmaps.com/49724-clean-choices/download",

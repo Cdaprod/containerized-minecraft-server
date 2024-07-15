@@ -64,9 +64,6 @@ RUN mkdir -p /usr/games && \
 RUN mkdir -p /var/games/minecraft/servers /mineos /bedrock_translator /maps /var/games/minecraft/logs && \
     chmod -R 777 /var/games/minecraft/logs
 
-# Download the latest Minecraft server JAR
-RUN wget -O /var/games/minecraft/server.jar https://launcher.mojang.com/v1/objects/latest_minecraft_server.jar
-
 # Download Bedrock server wrapper
 RUN wget -O /bedrock_translator/bedrock-server.zip https://minecraft.azureedge.net/bin-linux/bedrock-server-1.18.11.01.zip && \
     unzip /bedrock_translator/bedrock-server.zip -d /bedrock_translator && \

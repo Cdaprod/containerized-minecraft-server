@@ -48,7 +48,6 @@ RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1
 
 # Create users and set passwords
 RUN useradd -m -s /bin/bash mc && echo 'mc:root' | chpasswd
-RUN useradd -m -s /bin/bash root && echo 'root:root' | chpasswd
 
 # Download and set up MineOS
 RUN mkdir -p /usr/games && \

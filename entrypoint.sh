@@ -38,3 +38,6 @@ while :; do
   done
   sleep 1
 done
+
+# Keep the script running
+tail -f /dev/null

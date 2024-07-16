@@ -18,17 +18,20 @@ os.makedirs(map_dir, exist_ok=True)
 
 # Download and extract maps
 for url in map_urls:
-    response = requests.get(url)
-    response.raise_for_status()
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
 
-    if 'application/zip' in response.headers.get('Content-Type', ''):
-        zip_file = ZipFile(BytesIO(response.content))
-        map_name = os.path.splitext(os.path.basename(url))[0]
-        map_extract_path = os.path.join(map_dir, map_name)
-        os.makedirs(map_extract_path, exist_ok=True)
-        zip_file.extractall(map_extract_path)
-        print(f"Downloaded and extracted {map_name} successfully.")
-    else:
-        print(f"Skipping {url} as it is not a zip file.")
+        if 'application/zip' in response.headers.get('Content-Type', ''):
+            zip_file = ZipFile(BytesIO(response.content))
+            map_name = os.path.splitext(os.path.basename(url))[0]
+            map_extract_path = os.path.join(map_dir, map_name)
+            os.makedirs(map_extract_path, exist_ok=True)
+            zip_file.extractall(map_extract_path)
+            print(f"Downloaded and extracted {map_name} successfully.")
+        else:
+            print(f"Skipping {url} as it is not a zip file.")
+    except Exception as e:
+        print(f"Failed to download or extract {url}. Error: {e}")
 
 print("Maps downloaded and extracted successfully.")

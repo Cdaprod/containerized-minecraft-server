@@ -20,9 +20,6 @@ RUN apt-get update && apt-get install -y \
     passwd \
     tar
 
-# Install Amulet-Map-Editor
-RUN pip install amulet-map-editor
-
 # Use Eclipse Temurin for Java
 FROM eclipse-temurin:17-jre AS java-base
 
@@ -37,10 +34,19 @@ RUN apt-get update && apt-get install -y \
     rdiff-backup \
     libssl-dev \
     python3 \
-    python3-pip
-
-# Install Amulet-Map-Editor in the final stage
-RUN pip install amulet-map-editor
+    python3-pip \
+    build-essential \
+    libgtk-3-dev \
+    libgl1-mesa-dev \
+    libglu1-mesa-dev \
+    libjpeg-dev \
+    libpng-dev \
+    libtiff-dev \
+    libnotify-dev \
+    freeglut3-dev \
+    pkg-config \
+    libgtk2.0-dev \
+    libwxgtk3.0-gtk3-dev
 
 # Download and install libssl1.1 manually
 RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb && \
@@ -69,6 +75,9 @@ COPY download_mods.py /usr/local/bin/download_mods.py
 # Ensure the Python scripts are executable
 RUN chmod +x /usr/local/bin/download_maps.py
 RUN chmod +x /usr/local/bin/download_mods.py
+
+# Install Amulet-Map-Editor in the final stage
+RUN pip install amulet-map-editor
 
 # Run the map and mod download scripts
 RUN python3 /usr/local/bin/download_maps.py

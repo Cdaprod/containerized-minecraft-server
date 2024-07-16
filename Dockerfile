@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y \
     freeglut3-dev \
     pkg-config \
     libgtk2.0-dev \
-    libwxgtk3.0-gtk3-dev \
+    libwxgtk3.2-dev \
     libgtk-3-dev \
     libgl1-mesa-dev \
     libglu1-mesa-dev \
@@ -46,7 +46,7 @@ RUN apt-get update && apt-get install -y \
     freeglut3-dev \
     pkg-config \
     libgtk2.0-dev \
-    libwxgtk3.0-gtk3-dev \
+    libwxgtk3.2-dev \
     libgtk-3-dev \
     libgl1-mesa-dev \
     libglu1-mesa-dev \

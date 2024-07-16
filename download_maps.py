@@ -2,7 +2,6 @@ import os
 import requests
 from zipfile import ZipFile
 from io import BytesIO
-import tarfile
 
 # List of map URLs from web
 map_urls = [
@@ -12,52 +11,24 @@ map_urls = [
 ]
 
 # Directory to save maps
-map_dir = "/maps"
+map_dir = "/bedrock_translator/worlds"
 
-# Ensure the directory exists and has correct permissions
+# Ensure the directory exists
 os.makedirs(map_dir, exist_ok=True)
-os.chmod(map_dir, 0o777)
-
-# Function to extract ZIP files
-def extract_zip(zip_content, extract_path):
-    with ZipFile(BytesIO(zip_content)) as zip_ref:
-        zip_ref.extractall(extract_path)
-
-# Function to extract JAR files (treated as ZIP for simplicity)
-def extract_jar(jar_content, extract_path):
-    extract_zip(jar_content, extract_path)
-
-# Function to extract TAR files
-def extract_tar(tar_content, extract_path):
-    with tarfile.open(fileobj=BytesIO(tar_content)) as tar_ref:
-        tar_ref.extractall(extract_path)
 
 # Download and extract maps
 for url in map_urls:
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  # Check for HTTP request errors
+    response = requests.get(url)
+    response.raise_for_status()
 
-        content_type = response.headers.get('Content-Type', '')
-        file_extension = os.path.splitext(url)[1]
-
+    if 'application/zip' in response.headers.get('Content-Type', ''):
+        zip_file = ZipFile(BytesIO(response.content))
         map_name = os.path.splitext(os.path.basename(url))[0]
         map_extract_path = os.path.join(map_dir, map_name)
-
-        # Save and extract the file based on type
-        if 'application/zip' in content_type or file_extension == '.zip':
-            extract_zip(response.content, map_extract_path)
-        elif 'application/java-archive' in content_type or file_extension == '.jar':
-            extract_jar(response.content, map_extract_path)
-        elif 'application/x-tar' in content_type or file_extension == '.tar':
-            extract_tar(response.content, map_extract_path)
-        else:
-            print(f"Skipping {url} as it is not a supported archive file.")
-            continue
-
+        os.makedirs(map_extract_path, exist_ok=True)
+        zip_file.extractall(map_extract_path)
         print(f"Downloaded and extracted {map_name} successfully.")
-
-    except requests.RequestException as e:
-        print(f"Failed to download {url}: {e}")
+    else:
+        print(f"Skipping {url} as it is not a zip file.")
 
 print("Maps downloaded and extracted successfully.")

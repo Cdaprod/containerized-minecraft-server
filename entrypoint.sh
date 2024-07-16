@@ -1,17 +1,14 @@
 #!/bin/sh
-# Start the MineOS server
-cd /usr/games/minecraft
-npm start &
-
-# Function to stop the Bedrock server
-stop_server() {
-    pkill -f bedrock_server
-}
 
 # Function to start the Bedrock server
 start_server() {
     cd /bedrock_translator
     LD_LIBRARY_PATH=. ./bedrock_server &
+}
+
+# Function to stop the Bedrock server
+stop_server() {
+    pkill -f bedrock_server
 }
 
 # Check if a world name was provided

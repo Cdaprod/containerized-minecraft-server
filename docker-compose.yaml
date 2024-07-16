@@ -15,6 +15,7 @@ services:
       - ./data:/data
       - ./logs:/logs
       - ./maps:/maps
+      - ./mods:/mods
     environment:
       - EULA=TRUE
       - WORLD_NAME=saturns_orbit
@@ -33,6 +34,7 @@ services:
       - ./data:/data
       - ./logs:/logs
       - ./maps:/maps
+      - ./mods:/mods
     environment:
       - EULA=TRUE
       - WORLD_NAME=bessemer_city
@@ -51,6 +53,7 @@ services:
       - ./data:/data
       - ./logs:/logs
       - ./maps:/maps
+      - ./mods:/mods
     environment:
       - EULA=TRUE
       - WORLD_NAME=blue_tide

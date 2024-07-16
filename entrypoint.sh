@@ -11,10 +11,29 @@ stop_server() {
     pkill -f bedrock_server
 }
 
+# Copy maps from /maps to /bedrock_translator/worlds if they don't already exist
+copy_maps() {
+    for map in /maps/*; do
+        if [ -d "$map" ]; then
+            map_name=$(basename "$map")
+            dest_dir="/bedrock_translator/worlds/$map_name"
+            if [ ! -d "$dest_dir" ]; then
+                cp -r "$map" "$dest_dir"
+                echo "Copied $map_name to /bedrock_translator/worlds"
+            else
+                echo "$map_name already exists in /bedrock_translator/worlds"
+            fi
+        fi
+    done
+}
+
 # Check if a world name was provided
 if [ ! -z "$WORLD_NAME" ]; then
     stop_server
     WORLD_DIR="/bedrock_translator/worlds/$WORLD_NAME"
+
+    # Copy maps to the correct location
+    copy_maps
 
     # Check if the specified world directory exists
     if [ ! -d "$WORLD_DIR" ]; then
@@ -28,6 +47,8 @@ if [ ! -z "$WORLD_NAME" ]; then
 
     start_server
 else
+    # Copy maps to the correct location
+    copy_maps
     start_server
 fi
 

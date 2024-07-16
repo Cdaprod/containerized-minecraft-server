@@ -1,19 +1,50 @@
+# Use an official Python runtime as a parent image
+FROM python:3.9 AS python-base
+
+# Install necessary packages for Python
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    unzip \
+    git \
+    screen \
+    build-essential \
+    python3 \
+    python3-pip \
+    python3-dev \
+    g++ \
+    make \
+    libssl1.1 \
+    rsync \
+    rdiff-backup \
+    passwd \
+    tar
+
+# Use Eclipse Temurin for Java
 FROM eclipse-temurin:17-jre AS java-base
 
-# Install necessary dependencies
+# Install necessary dependencies in the java-base stage
 RUN apt-get update && apt-get install -y \
-    wget \
+    npm \
+    git \
+    python3-requests \
     unzip \
     screen \
     rsync \
-    rdiff-backup
+    rdiff-backup \
+    libssl-dev
+
+# Download and install libssl1.1 manually
+RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb && \
+    dpkg -i libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb && \
+    rm libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb
 
 # Create necessary directories with proper permissions
 RUN mkdir -p /bedrock_translator /maps && \
     chmod -R 777 /bedrock_translator /maps
 
 # Copy the Bedrock server ZIP file from the repository
-COPY maps/bedrock-server-1.21.2.01.zip /bedrock_translator/bedrock-server.zip
+COPY maps/bedrock-server-1.21.3.01.zip /bedrock_translator/bedrock-server.zip
 
 # Unzip the Bedrock server
 RUN unzip /bedrock_translator/bedrock-server.zip -d /bedrock_translator && \
@@ -25,9 +56,11 @@ COPY config/server.properties /bedrock_translator/server.properties
 
 # Copy the Python scripts to the container
 COPY download_maps.py /usr/local/bin/download_maps.py
+COPY download_mods.py /usr/local/bin/download_mods.py
 
-# Run the map download script
+# Run the map and mod download scripts
 RUN python3 /usr/local/bin/download_maps.py
+RUN python3 /usr/local/bin/download_mods.py
 
 # Copy switch world script to container
 COPY switch_world.sh /usr/local/bin/switch_world.sh
@@ -38,7 +71,7 @@ COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Expose necessary ports
-EXPOSE 19132/udp 19133/udp
+EXPOSE 19132/udp 19133/udp 19134/udp 19135/udp 19136/udp 19137/udp
 
 # Run the entrypoint script
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

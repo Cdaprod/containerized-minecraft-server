@@ -20,6 +20,9 @@ RUN apt-get update && apt-get install -y \
     passwd \
     tar
 
+# Install Amulet-Map-Editor
+RUN pip install amulet-map-editor
+
 # Use Eclipse Temurin for Java
 FROM eclipse-temurin:17-jre AS java-base
 

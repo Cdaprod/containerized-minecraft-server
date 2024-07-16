@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
     python3-dev \
     g++ \
     make \
-    libssl1.1 \
+    libssl-dev \
     rsync \
     rdiff-backup \
     libjpeg-dev \
@@ -33,12 +33,6 @@ RUN pip install amulet-map-editor
 
 # Use Eclipse Temurin for Java
 FROM eclipse-temurin:17-jre AS java-base
-
-# Switch to Debian-based layer
-RUN apt-get update && apt-get install -y \
-    apt-transport-https \
-    software-properties-common \
-    && apt-get clean
 
 # Install necessary dependencies in the java-base stage
 RUN apt-get update && apt-get install -y \
@@ -66,10 +60,10 @@ COPY --from=python-base /usr/local/bin /usr/local/bin
 RUN mkdir -p /bedrock_translator /maps && \
     chmod -R 777 /bedrock_translator /maps
 
-# Download and install libssl1.1 manually
-RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb && \
-    dpkg -i libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb && \
-    rm libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb
+# Download and install libssl-dev manually
+RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl-dev_1.1.1f-1ubuntu2.22_amd64.deb && \
+    dpkg -i libssl-dev_1.1.1f-1ubuntu2.22_amd64.deb && \
+    rm libssl-dev_1.1.1f-1ubuntu2.22_amd64.deb
 
 # Copy the Bedrock server ZIP file from the repository
 COPY maps/bedrock-server-1.21.3.01.zip /bedrock_translator/bedrock-server.zip

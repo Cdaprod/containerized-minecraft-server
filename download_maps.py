@@ -2,8 +2,7 @@ import os
 import requests
 from zipfile import ZipFile
 from io import BytesIO
-from amulet.api.world import World
-from amulet.api.data_types import Dimension
+from amulet import load_level
 
 # List of map URLs from web
 map_urls = [
@@ -25,14 +24,14 @@ os.makedirs(converted_dir, exist_ok=True)
 # Function to convert maps using Amulet
 def convert_map(map_path, output_path):
     # Load the world
-    world = World(map_path)
+    level = load_level(map_path)
     
     # Ensure output directory exists
     if not os.path.exists(output_path):
         os.makedirs(output_path, exist_ok=True)
     
     # Convert the world to Bedrock format
-    world.save(output_path, world.world_wrapper.platform)
+    level.save(output_path)
 
 # Download and extract maps
 for url in map_urls:

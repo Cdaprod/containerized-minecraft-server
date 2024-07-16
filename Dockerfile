@@ -1,61 +1,69 @@
 # Use an official Python runtime as a parent image
-FROM python:3.9 AS python-base
+FROM python:3.9-slim AS python-base
 
 # Install necessary packages for Python
 RUN apt-get update && apt-get install -y \
     curl \
     wget \
-    unzip \
     git \
     screen \
     build-essential \
-    python3 \
-    python3-pip \
     python3-dev \
     g++ \
     make \
     libssl1.1 \
     rsync \
     rdiff-backup \
-    passwd \
-    tar
-
-# Use Eclipse Temurin for Java
-FROM eclipse-temurin:17-jre AS java-base
-
-# Install necessary dependencies in the java-base stage
-RUN apt-get update && apt-get install -y \
-    npm \
-    git \
-    python3-requests \
-    unzip \
-    screen \
-    rsync \
-    rdiff-backup \
-    libssl-dev \
-    python3 \
-    python3-pip \
-    build-essential \
-    libgtk-3-dev \
-    libgl1-mesa-dev \
-    libglu1-mesa-dev \
     libjpeg-dev \
+    zlib1g-dev \
     libpng-dev \
     libtiff-dev \
     libnotify-dev \
     freeglut3-dev \
     pkg-config \
     libgtk2.0-dev \
-    libwxgtk3.0-gtk3-dev
+    libwxgtk3.0-gtk3-dev \
+    libgtk-3-dev \
+    libgl1-mesa-dev \
+    libglu1-mesa-dev \
+    && apt-get clean
+
+# Install Amulet-Map-Editor
+RUN pip install amulet-map-editor
+
+# Use Eclipse Temurin for Java
+FROM eclipse-temurin:17-jre-slim AS java-base
+
+# Install necessary dependencies in the java-base stage
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    libjpeg-dev \
+    zlib1g-dev \
+    libpng-dev \
+    libtiff-dev \
+    libnotify-dev \
+    freeglut3-dev \
+    pkg-config \
+    libgtk2.0-dev \
+    libwxgtk3.0-gtk3-dev \
+    libgtk-3-dev \
+    libgl1-mesa-dev \
+    libglu1-mesa-dev \
+    && apt-get clean
+
+# Copy the Python environment with Amulet-Map-Editor from the previous stage
+COPY --from=python-base /usr/local/lib/python3.9 /usr/local/lib/python3.9
+COPY --from=python-base /usr/local/bin /usr/local/bin
+
+# Create necessary directories with proper permissions
+RUN mkdir -p /bedrock_translator /maps && \
+    chmod -R 777 /bedrock_translator /maps
 
 # Download and install libssl1.1 manually
 RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb && \
     dpkg -i libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb && \
     rm libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb
-
-# Create necessary directories with proper permissions
-RUN mkdir -p /bedrock_translator /maps && \
-    chmod -R 777 /bedrock_translator /maps
 
 # Copy the Bedrock server ZIP file from the repository
 COPY maps/bedrock-server-1.21.3.01.zip /bedrock_translator/bedrock-server.zip
@@ -75,9 +83,6 @@ COPY download_mods.py /usr/local/bin/download_mods.py
 # Ensure the Python scripts are executable
 RUN chmod +x /usr/local/bin/download_maps.py
 RUN chmod +x /usr/local/bin/download_mods.py
-
-# Install Amulet-Map-Editor in the final stage
-RUN pip install amulet-map-editor
 
 # Run the map and mod download scripts
 RUN python3 /usr/local/bin/download_maps.py

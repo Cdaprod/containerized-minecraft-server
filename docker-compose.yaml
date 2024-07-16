@@ -6,16 +6,10 @@ services:
     image: cdaprod/saturns_orbit:latest
     container_name: saturns_orbit
     ports:
-      - "8443:8443"
-      - "25565:25565"
-      - "25575:25575"
       - "19132:19132/udp"
       - "19133:19133/udp"
     volumes:
-      - ./data:/data
-      - ./logs:/logs
       - ./maps:/maps
-      - ./mods:/mods
     environment:
       - EULA=TRUE
       - WORLD_NAME=saturns_orbit
@@ -25,16 +19,10 @@ services:
     image: cdaprod/bessemer_city:latest
     container_name: bessemer_city
     ports:
-      - "8444:8444"
-      - "25566:25566"
-      - "25576:25576"
       - "19134:19134/udp"
       - "19135:19135/udp"
     volumes:
-      - ./data:/data
-      - ./logs:/logs
       - ./maps:/maps
-      - ./mods:/mods
     environment:
       - EULA=TRUE
       - WORLD_NAME=bessemer_city
@@ -44,16 +32,10 @@ services:
     image: cdaprod/blue_tide:latest
     container_name: blue_tide
     ports:
-      - "8445:8445"
-      - "25567:25567"
-      - "25577:25577"
       - "19136:19136/udp"
       - "19137:19137/udp"
     volumes:
-      - ./data:/data
-      - ./logs:/logs
       - ./maps:/maps
-      - ./mods:/mods
     environment:
       - EULA=TRUE
       - WORLD_NAME=blue_tide

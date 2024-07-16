@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.9 AS python-base
+FROM python:3.9-slim AS python-base
 
 # Install necessary packages for Python
 RUN apt-get update && apt-get install -y \
@@ -31,8 +31,8 @@ RUN apt-get update && apt-get install -y \
 # Install Amulet-Map-Editor
 RUN pip install amulet-map-editor
 
-# Use Eclipse Temurin for Java
-FROM eclipse-temurin:17-jre-slim AS java-base
+# Use Amazon Corretto for Java
+FROM amazoncorretto:17 AS java-base
 
 # Install necessary dependencies in the java-base stage
 RUN apt-get update && apt-get install -y \

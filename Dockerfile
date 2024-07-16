@@ -31,8 +31,14 @@ RUN apt-get update && apt-get install -y \
 # Install Amulet-Map-Editor
 RUN pip install amulet-map-editor
 
-# Use Amazon Corretto for Java
-FROM openjdk:17 AS java-base
+# Use Eclipse Temurin for Java
+FROM eclipse-temurin:17-jre AS java-base
+
+# Switch to Debian-based layer
+RUN apt-get update && apt-get install -y \
+    apt-transport-https \
+    software-properties-common \
+    && apt-get clean
 
 # Install necessary dependencies in the java-base stage
 RUN apt-get update && apt-get install -y \

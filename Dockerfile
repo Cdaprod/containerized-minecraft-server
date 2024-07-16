@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.9-slim AS python-base
+FROM python:3.9 AS python-base
 
 # Install necessary packages for Python
 RUN apt-get update && apt-get install -y \

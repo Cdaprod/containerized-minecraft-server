@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y \
     freeglut3-dev \
     pkg-config \
     libgtk2.0-dev \
-    libwxgtk3.2-dev \
+    libwxgtk3.0-gtk3-dev \
     libgtk-3-dev \
     libgl1-mesa-dev \
     libglu1-mesa-dev \
@@ -46,7 +46,7 @@ RUN apt-get update && apt-get install -y \
     freeglut3-dev \
     pkg-config \
     libgtk2.0-dev \
-    libwxgtk3.2-dev \
+    libwxgtk3.0-gtk3-dev \
     libgtk-3-dev \
     libgl1-mesa-dev \
     libglu1-mesa-dev \
@@ -59,11 +59,6 @@ COPY --from=python-base /usr/local/bin /usr/local/bin
 # Create necessary directories with proper permissions
 RUN mkdir -p /bedrock_translator /maps && \
     chmod -R 777 /bedrock_translator /maps
-
-# Download and install libssl-dev manually
-RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl-dev_1.1.1f-1ubuntu2.22_amd64.deb && \
-    dpkg -i libssl-dev_1.1.1f-1ubuntu2.22_amd64.deb && \
-    rm libssl-dev_1.1.1f-1ubuntu2.22_amd64.deb
 
 # Copy the Bedrock server ZIP file from the repository
 COPY maps/bedrock-server-1.21.3.01.zip /bedrock_translator/bedrock-server.zip

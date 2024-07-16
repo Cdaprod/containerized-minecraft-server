@@ -35,7 +35,12 @@ RUN apt-get update && apt-get install -y \
     screen \
     rsync \
     rdiff-backup \
-    libssl-dev
+    libssl-dev \
+    python3 \
+    python3-pip
+
+# Install Amulet-Map-Editor in the final stage
+RUN pip install amulet-map-editor
 
 # Download and install libssl1.1 manually
 RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb && \
@@ -60,6 +65,10 @@ COPY config/server.properties /bedrock_translator/server.properties
 # Copy the Python scripts to the container
 COPY download_maps.py /usr/local/bin/download_maps.py
 COPY download_mods.py /usr/local/bin/download_mods.py
+
+# Ensure the Python scripts are executable
+RUN chmod +x /usr/local/bin/download_maps.py
+RUN chmod +x /usr/local/bin/download_mods.py
 
 # Run the map and mod download scripts
 RUN python3 /usr/local/bin/download_maps.py

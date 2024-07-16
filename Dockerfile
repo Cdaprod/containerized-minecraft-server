@@ -32,7 +32,7 @@ RUN apt-get update && apt-get install -y \
 RUN pip install amulet-map-editor
 
 # Use Amazon Corretto for Java
-FROM amazoncorretto:17.0.11-debian AS java-base
+FROM openjdk:17-jdk AS java-base
 
 # Install necessary dependencies in the java-base stage
 RUN apt-get update && apt-get install -y \
